@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Block direct access to MVC folders
+RewriteRule ^views/ - [F,L,NC]
+RewriteRule ^models/ - [F,L,NC]
+RewriteRule ^controllers/ - [F,L,NC]
+
+# Simple routing via index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
