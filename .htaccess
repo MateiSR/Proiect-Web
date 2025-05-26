@@ -4,6 +4,7 @@ RewriteEngine On
 RewriteRule ^views/ - [F,L,NC]
 RewriteRule ^models/ - [F,L,NC]
 RewriteRule ^controllers/ - [F,L,NC]
+RewriteRule ^config/ - [F,L,NC]
 
 # Simple routing via index.php
 RewriteCond %{REQUEST_FILENAME} !-f
