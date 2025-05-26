@@ -1,6 +1,7 @@
 <?php
 
-class Database {
+class Database
+{
     private $host = 'localhost';
     private $db_name = 'books_db';
     private $username = 'postgres';
@@ -8,7 +9,8 @@ class Database {
     private $port = '5432';
     private $conn;
 
-    public function connect() {
+    public function connect()
+    {
         $this->conn = null;
 
         $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";

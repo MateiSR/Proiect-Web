@@ -1,0 +1,67 @@
+# Composer
+/vendor/
+composer.lock
+composer.phar
+
+# PHP built-in web server
+.php_cs_fixer.cache
+.php-cs-fixer.cache
+.php-cs-fixer.php
+.phpintel
+.psysh.php
+
+# Logs and dump files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+*.out
+*.dump
+*.pid
+*.seed
+*.pid.lock
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.dist
+
+# IDE and editor specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build and test artifacts
+build/
+coverage/
+tests/_output/
+tests/_support/_generated/
+
+# Temporary files
+tmp/
+temp/
+cache/
+
+# Operating System files
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+ehthumbs_vista.db
+
+# User-specific files (if any, add your own)
+# For example:
+# my_local_settings.php
+
+# Local development tools
+/.vagrant/
+Homestead.yaml
+Homestead.json
