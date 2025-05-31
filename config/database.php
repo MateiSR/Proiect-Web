@@ -12,6 +12,7 @@ class Database
 
     public function __construct()
     {
+
         $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
 
         try {
