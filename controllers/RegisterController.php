@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../config/utils.php';
 
 class RegisterController
 {
@@ -14,9 +15,14 @@ class RegisterController
   public function index()
   {
     $message = null;
+    $message_type = '';
+    $loggedInUser = Utils::getLoggedInUser();
+    if ($loggedInUser != null) {
+      $message = "You are already logged in as " . htmlspecialchars($loggedInUser) . ".";
+      $message_type = "error";
+    }
     $email_value = '';
     $username_value = '';
-    $message_type = '';
     require_once __DIR__ . '/../views/register_view.php';
   }
 
@@ -29,6 +35,13 @@ class RegisterController
     $password_confirm = $_POST["password_confirm"] ?? '';
     $errors = [];
     $message_type = 'error';
+
+    $loggedInUser = Utils::getLoggedInUser();
+    if ($loggedInUser != null) {
+      $message = "You are already logged in as " . htmlspecialchars($loggedInUser) . ".";
+      require_once __DIR__ . '/../views/register_view.php';
+      return;
+    }
 
     // validate inptu
 

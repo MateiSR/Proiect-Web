@@ -1,11 +1,10 @@
 <?php
 $request = $_SERVER['REQUEST_URI'];
 $request_method = $_SERVER['REQUEST_METHOD'];
-echo '[DEBUG] requested route: ' . $request;
-echo '<br>';
-echo '[DEBUG] request method: ' . $request_method;
-echo '<br>';
+
+require_once __DIR__ . '/layout.php';
 switch ($request) {
+
     case '/':
         require __DIR__ . '/public/home.php';
         break;
