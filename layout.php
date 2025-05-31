@@ -2,29 +2,8 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config/utils.php';
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Firebase\JWT\ExpiredException;
-
 $loggedInUser = Utils::getLoggedInUser();
 
-if (isset($_COOKIE['auth_token'])) {
-  $jwt = $_COOKIE['auth_token'];
-  $key = 'CHEIA MEA SUPER SECRETA';
-
-  try {
-    $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
-    $loggedInUser = $decoded->username;
-  } catch (ExpiredException $e) {
-    // expired token
-    $loggedInUser = null;
-    setcookie('auth_token', '', time() - 3600, '/');
-  } catch (Exception $e) {
-    // invalid token
-    $loggedInUser = null;
-    setcookie('auth_token', '', time() - 3600, '/');
-  }
-}
 ?>
 
 <head>
