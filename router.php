@@ -91,6 +91,17 @@ switch ($request) {
         ob_end_clean();
         break;
 
+    case '/libraries':
+        ob_start();
+        require_once __DIR__ . '/controllers/LibraryController.php';
+        $controller = new LibraryController();
+        if ($request_method === 'GET') {
+            $controller->findNearby();
+        } else {
+            http_response_code(405); // Method Not Allowed
+            exit;
+        }
+
     default:
         http_response_code(404);
         ob_start();

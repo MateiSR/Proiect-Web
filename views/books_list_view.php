@@ -24,9 +24,69 @@
     </div>
   <?php else: ?>
     <?php if (!empty($searchTerm)): ?>
-      <p>No books found for <strong>"<?php echo htmlspecialchars($searchTerm); ?>"</strong></a></p>
+      <div class="center">
+        <p>No books found for <strong>"<?php echo htmlspecialchars($searchTerm); ?>"</strong></a></p>
+        <button id="fetch-libraries" class="search-button">Fetch Nearby Libraries</button>
+        <div id="nearby-libraries"></div>
+      </div>
     <?php else: ?>
       <p>No books found. <a href="/add-book">Add a book!</a></p>
     <?php endif; ?>
   <?php endif; ?>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fetchButton = document.getElementById('fetch-libraries');
+    const librariesListUl = document.getElementById('nearby-libraries');
+
+    if (fetchButton) {
+      fetchButton.addEventListener('click', function () {
+        librariesListUl.innerHTML = '<ul></ul>';
+
+        // try to get location
+        $lat = 47.1585;
+        $lon = 27.6014;
+        if (!navigator.geolocation) {
+          librariesListUl.innerHTML = '<li>Location permission not allowed, using Iasi, Romania as default.</li>';
+        } else {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              $lat = position.coords.latitude;
+              $lon = position.coords.longitude;
+              console.log('Current location:', $lat, $lon);
+            },
+            error => {
+              console.error('Location error:', error);
+              librariesListUl.innerHTML = '<li><strong>Location permission denied, using Iasi, Romania as default.</strong></li>';
+            }
+          );
+        }
+
+        fetch('/libraries?lat=' + $lat + '&lon=' + $lon)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error while fetching libraries');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // console.log(data["libraries"]);
+            if (data["libraries"]) {
+              data["libraries"].forEach(library => {
+                const li = document.createElement('li');
+                li.textContent = `${library.name} - ${library.address}`;
+                librariesListUl.appendChild(li);
+              });
+            } else {
+              librariesListUl.innerHTML = '<li>No nearby libraries found.</li>';
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching libraries:', error);
+            librariesListUl.innerHTML = '<li>Error fetching libraries.</li>';
+          });
+      });
+    }
+  });
+</script>
