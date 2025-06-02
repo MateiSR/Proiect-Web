@@ -14,7 +14,14 @@ class BookController
 
   public function index()
   {
-    $books = $this->bookModel->getAllBooks();
+    $searchTerm = trim($_GET['search'] ?? '');
+    $books = [];
+
+    if (!empty($searchTerm)) {
+      $books = $this->bookModel->searchBooks($searchTerm);
+    } else {
+      $books = $this->bookModel->getAllBooks();
+    }
     require_once __DIR__ . '/../views/books_list_view.php';
   }
 

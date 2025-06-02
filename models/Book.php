@@ -52,5 +52,23 @@ class Book
       return false;
     }
   }
+  public function searchBooks(string $searchTerm)
+  {
+    // ilike = like but not case sensitive
+    $query = "SELECT id, title, author, genre, created_at FROM " . $this->table_name . "
+                  WHERE title ILIKE :searchTerm OR author ILIKE :searchTerm
+                  ORDER BY title ASC";
+
+    $likeTerm = '%' . $searchTerm . '%';
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':searchTerm', $likeTerm, PDO::PARAM_STR);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      return [];
+    }
+  }
+
 }
 ?>

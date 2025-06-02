@@ -1,5 +1,11 @@
-<div class="books-list-container-responsive">
+<div class="books-list-container">
   <h2>Library Catalog</h2>
+
+  <form action="/books" method="get" class="center">
+    <input type="text" name="search" placeholder="Search book"
+      value="<?php echo htmlspecialchars($searchTerm ?? ''); ?>" class="search-box">
+    <button type="submit" class="search-button">Search</button>
+  </form>
   <?php if (!empty($books)): ?>
     <div class="books-grid">
       <?php foreach ($books as $book): ?>
@@ -17,6 +23,10 @@
       <?php endforeach; ?>
     </div>
   <?php else: ?>
-    <p>No books found. <a href="/add-book">Add a book!</a></p>
+    <?php if (!empty($searchTerm)): ?>
+      <p>No books found for <strong>"<?php echo htmlspecialchars($searchTerm); ?>"</strong></a></p>
+    <?php else: ?>
+      <p>No books found. <a href="/add-book">Add a book!</a></p>
+    <?php endif; ?>
   <?php endif; ?>
 </div>
