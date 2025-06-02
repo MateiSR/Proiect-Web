@@ -70,3 +70,115 @@ main {
 .color-red {
   color: red;
 }
+
+.highlight-link {
+  font-weight: bold;
+}
+
+
+  .book-detail-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 2rem;
+  }
+
+  .book-detail-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+  }
+
+  .book-meta p {
+    color: #555;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 0.5rem;
+  }
+
+  .book-description {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    font-size: 1rem;
+    color: #666;
+  }
+
+  .book-actions {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+
+  .btn-back {
+    padding: 12px 25px;
+    background-color: #3498db;
+    color: white;
+  }
+
+  .btn-back:hover {
+    background-color: #2980b9;
+  }
+
+
+.books-list-container-responsive {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem;
+  padding: 1.5rem;
+}
+
+.books-list-container-responsive h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.books-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+.book-card {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.book-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.book-card h3 a {
+  color: #007bff;
+}
+
+/* media queries */
+@media (min-width: 600px) {
+  .books-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .books-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .books-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.books-list-container-responsive p {
+  text-align: center;
+  color: #555;
+}
+
+.books-list-container-responsive a {
+  color: #007bff;
+}

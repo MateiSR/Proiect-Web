@@ -1,5 +1,5 @@
 <?php
-$request = $_SERVER['REQUEST_URI'];
+$request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $request_method = $_SERVER['REQUEST_METHOD'];
 
 require_once __DIR__ . '/config/utils.php';
@@ -48,6 +48,49 @@ switch ($request) {
         ob_end_clean();
         break;
 
+    case '/books':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        $controller->index();
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/book':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT) && ((int) $_GET['id']) > 0) {
+            $controller->show((int) $_GET['id']);
+        } else {
+            http_response_code(400);
+            $errorMessage = "Invalid or missing book ID.";
+            require __DIR__ . '/views/error_view.php';
+        }
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/add-book':
+        ob_start();
+        $loggedInUser = Utils::getLoggedInUser();
+        if (!$loggedInUser) {
+            ob_end_clean();
+            header("Location: /login");
+            exit;
+        }
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        if ($request_method === 'POST') {
+            $controller->store();
+        } else {
+            $controller->create();
+        }
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
     default:
         http_response_code(404);
         ob_start();
@@ -57,7 +100,6 @@ switch ($request) {
         break;
 }
 
-// global $content to be used in the layout
 $loggedInUser = Utils::getLoggedInUser();
 
 require __DIR__ . '/layout.php';

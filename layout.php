@@ -17,6 +17,7 @@ $content = $content ?? '';
       <p>Books on Web</p>
     </a>
     <div class="nav-links">
+      <a href="/books" class="highlight-link">Books</a>
       <?php if (isset($loggedInUser)): ?>
         <span class="color-gray">
           Hello, <?= htmlspecialchars($loggedInUser) ?>!
