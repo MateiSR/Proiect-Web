@@ -16,9 +16,9 @@ class RegisterController
   {
     $message = null;
     $message_type = '';
-    $loggedInUser = Utils::getLoggedInUser();
-    if ($loggedInUser != null) {
-      $message = "You are already logged in as " . htmlspecialchars($loggedInUser) . ".";
+    $currentUser = Utils::getLoggedInUser();
+    if ($currentUser && isset($currentUser['username'])) {
+      $message = "You are already logged in as " . htmlspecialchars($currentUser['username']) . ".";
       $message_type = "error";
     }
     $email_value = '';
@@ -36,17 +36,18 @@ class RegisterController
     $errors = [];
     $message_type = 'error';
 
-    $loggedInUser = Utils::getLoggedInUser();
-    if ($loggedInUser != null) {
-      $message = "You are already logged in as " . htmlspecialchars($loggedInUser) . ".";
+    $currentUser = Utils::getLoggedInUser();
+    if ($currentUser && isset($currentUser['username'])) {
+      $message = "You are already logged in as " . htmlspecialchars($currentUser['username']) . ".";
       require_once __DIR__ . '/../views/register_view.php';
       return;
     }
 
-    // validate inptu
-
     if (empty($email_value))
       $errors[] = "Email is required.";
+    elseif (!filter_var($email_value, FILTER_VALIDATE_EMAIL))
+      $errors[] = "Invalid email format.";
+
 
     if (empty($username_value))
       $errors[] = "Username is required.";
@@ -85,10 +86,9 @@ class RegisterController
           $message = implode("<br>", $errors);
         }
       } catch (PDOException $e) {
-        $err = "Database error: " . $e->getMessage();
+        $message = "Database error during registration. Please try again later.";
       } catch (Exception $e) {
-        $err = "Unknown error: " . $e->getMessage();
-
+        $message = "An unknown error occurred during registration.";
       }
     } else {
       $message = implode("<br>", $errors);
@@ -96,5 +96,4 @@ class RegisterController
     require_once __DIR__ . '/../views/register_view.php';
   }
 }
-
 ?>

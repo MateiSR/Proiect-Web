@@ -40,11 +40,9 @@ class BookController
 
   public function create()
   {
-    $loggedInUser = Utils::getLoggedInUser();
-    if (!$loggedInUser) {
-      header("Location: /login");
-      exit;
-    }
+
+    // admin check by router
+
     $message = null;
     $message_type = '';
     $title_value = '';
@@ -55,13 +53,7 @@ class BookController
 
   public function store()
   {
-    $loggedInUser = Utils::getLoggedInUser();
-    if (!$loggedInUser) {
-      http_response_code(403);
-      $errorMessage = "You must be logged in to add a book.";
-      require __DIR__ . '/../views/error_view.php';
-      return;
-    }
+    // admin check by router
 
     $title_value = trim($_POST['title'] ?? '');
     $author_value = trim($_POST['author'] ?? '');

@@ -20,7 +20,7 @@ class LoginController
     $loggedInUser = Utils::getLoggedInUser();
     $err = null;
     if ($loggedInUser != null) {
-      $err = "You are already logged in as " . htmlspecialchars($loggedInUser) . ".";
+      $err = "You are already logged in as " . htmlspecialchars($loggedInUser['username']) . ".";
     }
     $identifier_value = '';
     require_once __DIR__ . '/../views/login_view.php';
@@ -30,7 +30,7 @@ class LoginController
   {
     $loggedInUser = Utils::getLoggedInUser();
     if ($loggedInUser != null) {
-      $err = "You are already logged in as " . htmlspecialchars($loggedInUser) . ".";
+      $err = "You are already logged in as " . htmlspecialchars($loggedInUser['username']) . ".";
       require_once __DIR__ . '/../views/login_view.php';
       return;
     }
@@ -58,7 +58,8 @@ class LoginController
             'exp' => $expirationTime,
             'user_id' => $user['id'],
             'email' => $user['email'],
-            'username' => $user['username']
+            'username' => $user['username'],
+            'is_admin' => ((bool) $user['is_admin']) ?? false
           ];
 
           $jwt = JWT::encode($payload, $key, 'HS256');

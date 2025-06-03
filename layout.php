@@ -20,8 +20,11 @@ $content = $content ?? '';
       <a href="/books" class="highlight-link">Books</a>
       <?php if (isset($loggedInUser)): ?>
         <span class="color-gray">
-          Hello, <?= htmlspecialchars($loggedInUser) ?>!
+          Hello, <?= htmlspecialchars($loggedInUser['username']) ?>!
         </span>
+        <?php if (isset($loggedInUser['is_admin']) && $loggedInUser['is_admin'] === true): ?>
+          <a href="/admin" class="highlight-link">Admin Home</a>
+        <?php endif; ?>
         <a href="/logout">Logout</a>
       <?php else: ?>
         <a href="/login">Login</a>

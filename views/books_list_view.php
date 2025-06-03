@@ -30,7 +30,7 @@
         <div id="nearby-libraries"></div>
       </div>
     <?php else: ?>
-      <p>No books found. <a href="/add-book">Add a book!</a></p>
+      <p>No books found.</p>
     <?php endif; ?>
   <?php endif; ?>
 </div>

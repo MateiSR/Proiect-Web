@@ -1,5 +1,5 @@
 <div class="form">
-  <form method="post" action="/add-book">
+  <form method="post" action="/admin/add-book">
     <h2>Add New Book</h2>
 
     <?php

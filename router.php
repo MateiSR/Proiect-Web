@@ -4,11 +4,32 @@ $request_method = $_SERVER['REQUEST_METHOD'];
 
 require_once __DIR__ . '/config/utils.php';
 
+$currentUser = Utils::getLoggedInUser();
+
+if (strpos($request, '/admin') === 0) {
+    if (!$currentUser || !isset($currentUser['is_admin']) || !$currentUser['is_admin']) {
+        if (!$currentUser) {
+            header("Location: /");
+        } else {
+            http_response_code(403); // Forbidden
+            $errorMessage = "Access Denied. You are not an admin.";
+            ob_start();
+            require __DIR__ . '/views/error_view.php';
+            $content = ob_get_clean();
+            ob_end_clean();
+            require __DIR__ . '/layout.php';
+            exit;
+        }
+        exit;
+    }
+}
+
+
 
 switch ($request) {
     case '/':
         ob_start();
-        require __DIR__ . '/public/home.php';
+        require __DIR__ . '/views/home.php';
         $content = ob_get_clean();
         ob_end_clean();
         break;
@@ -72,7 +93,15 @@ switch ($request) {
         ob_end_clean();
         break;
 
-    case '/add-book':
+    case '/admin':
+    case '/admin/':
+        ob_start();
+        require_once __DIR__ . '/views/admin_home_view.php';
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/admin/add-book':
         ob_start();
         $loggedInUser = Utils::getLoggedInUser();
         if (!$loggedInUser) {

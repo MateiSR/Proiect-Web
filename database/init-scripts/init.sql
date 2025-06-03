@@ -4,7 +4,8 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+	is_admin BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE books (
@@ -14,6 +15,9 @@ CREATE TABLE books (
     genre VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO users (username, email, password, is_admin) VALUES
+('admin', 'admin@admin.com', '$2y$10$SvCfPHzNz20vR2pySTm5quZ./Pn.TxdMSfxYfjjWdPOcR2AURqUHa', TRUE);
 
 INSERT INTO books (title, author, genre) VALUES
 ('The Midnight Library', 'Matt Haig', 'Contemporary Fiction, Magical Realism'),

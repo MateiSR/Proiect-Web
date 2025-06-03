@@ -1,11 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books on Web</title>
-</head>
-<body>
-    <h1>Homepage</h1>
-    <a href="/test">Click to go to test page</a>
-</body>
+<?php
+require_once __DIR__ . '/../config/utils.php';
+$loggedInUser = Utils::getLoggedInUser();
+?>
+<h1>Home</h1>
+
+<?php
+if ($loggedInUser) {
+    echo '<p>Welcome, ' . htmlspecialchars($loggedInUser['username']) . '!</p>';
+    echo '<p>You are an ' . ($loggedInUser['is_admin'] ? 'admin' : 'user') . '.</p>';
+} else {
+    echo '<p>You are not logged in. Please <a href="/login">login</a> or <a href="/register">register</a>.</p>';
+}
+?>

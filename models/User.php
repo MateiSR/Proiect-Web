@@ -14,7 +14,7 @@ class User
 
     public function findUserByEmailOrUsername(string $email, string $username)
     {
-        $query = "SELECT id, email, username, password FROM users WHERE email = :email OR username = :username LIMIT 1";
+        $query = "SELECT id, email, username, password, is_admin FROM users WHERE email = :email OR username = :username LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':username', $username);
