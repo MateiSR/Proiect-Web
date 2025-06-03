@@ -23,6 +23,11 @@
       <label for="genre">Genre (Optional):</label><br>
       <input type="text" id="genre" name="genre" value="<?php echo htmlspecialchars($genre_value ?? ''); ?>"><br><br>
     </div>
+    <div>
+      <label for="description">Description (Optional):</label><br>
+      <textarea id="description" name="description" rows="5"
+        cols="50"><?php echo htmlspecialchars($description_value ?? ''); ?></textarea><br><br>
+    </div>
     <button type="submit">Add Book</button>
   </form>
 </div>

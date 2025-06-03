@@ -9,7 +9,8 @@
     </div>
 
     <div class="book-description">
-      <p>Book description!</p>
+      <p><strong>Description:</strong>
+        <?php echo htmlspecialchars($book['description'] ?? 'No description available.'); ?></p>
     </div>
 
     <div class="book-actions">

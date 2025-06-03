@@ -48,6 +48,7 @@ class BookController
     $title_value = '';
     $author_value = '';
     $genre_value = '';
+    $description_value = '';
     require_once __DIR__ . '/../views/add_book_form_view.php';
   }
 
@@ -59,6 +60,8 @@ class BookController
     $author_value = trim($_POST['author'] ?? '');
     $genre_value = trim($_POST['genre'] ?? '');
     $genre_value = !empty($genre_value) ? $genre_value : null;
+    $description_value = trim($_POST['description'] ?? '');
+    $description_value = !empty($description_value) ? $description_value : null;
 
     $errors = [];
     $message = null;
@@ -72,7 +75,7 @@ class BookController
     }
 
     if (empty($errors)) {
-      if ($this->bookModel->createBook($title_value, $author_value, $genre_value)) {
+      if ($this->bookModel->createBook($title_value, $author_value, $genre_value, $description_value)) {
         header("Location: /books");
         exit;
       } else {
@@ -113,6 +116,8 @@ class BookController
     $author_value = trim($_POST['author'] ?? '');
     $genre_value = trim($_POST['genre'] ?? '');
     $genre_value = !empty($genre_value) ? $genre_value : null;
+    $description_value = trim($_POST['description'] ?? '');
+    $description_value = !empty($description_value) ? $description_value : null;
 
     $errors = [];
     $message = null;
@@ -135,7 +140,7 @@ class BookController
 
 
     if (empty($errors)) {
-      if ($this->bookModel->updateBook($id, $title_value, $author_value, $genre_value)) {
+      if ($this->bookModel->updateBook($id, $title_value, $author_value, $genre_value, $description_value)) {
         $message = "Book updated successfully!";
         $message_type = 'success';
         // Refresh book data after update
@@ -190,7 +195,7 @@ class BookController
         require_once __DIR__ . '/../views/admin_import_books_view.php';
         return;
       }
-      $expected_headers = ['title', 'author', 'genre'];
+      $expected_headers = ['title', 'author', 'genre', 'description'];
       $header_map = [];
       foreach ($expected_headers as $expected_header) {
         $index = array_search($expected_header, $header);
@@ -200,7 +205,7 @@ class BookController
       }
 
       if (count($header_map) < 2 || !isset($header_map['title']) || !isset($header_map['author'])) {
-        $message = "CSV file must contain 'title' and 'author' columns. 'genre' is optional.";
+        $message = "CSV file must contain 'title' and 'author' columns. 'genre' and 'description' are optional.";
         fclose($handle);
         require_once __DIR__ . '/../views/admin_import_books_view.php';
         return;
@@ -210,9 +215,10 @@ class BookController
         $title = $data[$header_map['title']] ?? '';
         $author = $data[$header_map['author']] ?? '';
         $genre = $data[$header_map['genre']] ?? null;
+        $description = $data[$header_map['description']] ?? null;
 
         if (!empty($title) && !empty($author)) {
-          if ($this->bookModel->createBook($title, $author, $genre)) {
+          if ($this->bookModel->createBook($title, $author, $genre, $description)) {
             $imported_count++;
           }
         }
@@ -270,9 +276,10 @@ class BookController
       $title = $book['title'] ?? null;
       $author = $book['author'] ?? null;
       $genre = $book['genre'] ?? null;
+      $description = $book['description'] ?? null;
 
       if (!empty($title) && !empty($author)) {
-        if ($this->bookModel->createBook($title, $author, $genre)) {
+        if ($this->bookModel->createBook($title, $author, $genre, $description)) {
           $imported_count++;
         }
       }

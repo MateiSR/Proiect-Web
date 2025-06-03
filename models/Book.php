@@ -15,7 +15,7 @@ class Book
 
   public function getAllBooks()
   {
-    $query = "SELECT id, title, author, genre, created_at FROM " . $this->table_name . " ORDER BY title ASC";
+    $query = "SELECT id, title, author, genre, description, created_at FROM " . $this->table_name . " ORDER BY title ASC";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->execute();
@@ -27,7 +27,7 @@ class Book
 
   public function findBookById(int $id)
   {
-    $query = "SELECT id, title, author, genre, created_at FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+    $query = "SELECT id, title, author, genre, description, created_at FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -39,14 +39,15 @@ class Book
     }
   }
 
-  public function createBook(string $title, string $author, ?string $genre): bool
+  public function createBook(string $title, string $author, ?string $genre, ?string $description = null): bool
   {
-    $query = "INSERT INTO " . $this->table_name . " (title, author, genre) VALUES (:title, :author, :genre)";
+    $query = "INSERT INTO " . $this->table_name . " (title, author, genre, description) VALUES (:title, :author, :genre, :description)";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':title', $title);
       $stmt->bindParam(':author', $author);
       $stmt->bindParam(':genre', $genre);
+      $stmt->bindParam(':description', $description);
       return $stmt->execute();
     } catch (PDOException $e) {
       return false;
@@ -55,7 +56,7 @@ class Book
   public function searchBooks(string $searchTerm)
   {
     // ilike = like but not case sensitive
-    $query = "SELECT id, title, author, genre, created_at FROM " . $this->table_name . "
+    $query = "SELECT id, title, author, genre, description, created_at FROM " . $this->table_name . "
                   WHERE title ILIKE :searchTerm OR author ILIKE :searchTerm
                   ORDER BY title ASC";
 
@@ -70,15 +71,16 @@ class Book
     }
   }
 
-  public function updateBook(int $id, string $title, string $author, ?string $genre): bool
+  public function updateBook(int $id, string $title, string $author, ?string $genre, ?string $description): bool
   {
-    $query = "UPDATE " . $this->table_name . " SET title = :title, author = :author, genre = :genre WHERE id = :id";
+    $query = "UPDATE " . $this->table_name . " SET title = :title, author = :author, genre = :genre, description = :description WHERE id = :id";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
       $stmt->bindParam(':title', $title);
       $stmt->bindParam(':author', $author);
       $stmt->bindParam(':genre', $genre);
+      $stmt->bindParam(':description', $description);
       return $stmt->execute();
     } catch (PDOException $e) {
       return false;
