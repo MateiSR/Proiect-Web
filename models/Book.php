@@ -70,5 +70,30 @@ class Book
     }
   }
 
+  public function updateBook(int $id, string $title, string $author, ?string $genre): bool
+  {
+    $query = "UPDATE " . $this->table_name . " SET title = :title, author = :author, genre = :genre WHERE id = :id";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt->bindParam(':title', $title);
+      $stmt->bindParam(':author', $author);
+      $stmt->bindParam(':genre', $genre);
+      return $stmt->execute();
+    } catch (PDOException $e) {
+      return false;
+    }
+  }
+
+  public function deleteBook(int $id): bool
+  {
+    $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      return $stmt->execute();
+    } catch (PDOException $e) {
+      return false;
+    }
+  }
 }
-?>

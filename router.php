@@ -101,6 +101,49 @@ switch ($request) {
         ob_end_clean();
         break;
 
+    case '/admin/books':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        $controller->adminIndex();
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/admin/books/edit':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT) && ((int) $_GET['id']) > 0) {
+            if ($request_method === 'POST') {
+                $controller->update((int) $_GET['id']);
+            } else {
+                $controller->edit((int) $_GET['id']);
+            }
+        } else {
+            http_response_code(400);
+            $errorMessage = "Invalid or missing book ID.";
+            require __DIR__ . '/views/error_view.php';
+        }
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/admin/books/delete':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        if ($request_method === 'POST' && isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT) && ((int) $_POST['id']) > 0) {
+            $controller->delete((int) $_POST['id']);
+        } else {
+            http_response_code(400);
+            $errorMessage = "Invalid or missing book ID for deletion.";
+            require __DIR__ . '/views/error_view.php';
+        }
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
     case '/admin/add-book':
         ob_start();
         $loggedInUser = Utils::getLoggedInUser();
@@ -115,6 +158,45 @@ switch ($request) {
             $controller->store();
         } else {
             $controller->create();
+        }
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/admin/import-books':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        $controller->importForm();
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/admin/import-books/csv':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        if ($request_method === 'POST') {
+            $controller->importCsv();
+        } else {
+            http_response_code(405);
+            $errorMessage = "Method Not Allowed.";
+            require __DIR__ . '/views/error_view.php';
+        }
+        $content = ob_get_clean();
+        ob_end_clean();
+        break;
+
+    case '/admin/import-books/json':
+        ob_start();
+        require_once __DIR__ . '/controllers/BookController.php';
+        $controller = new BookController();
+        if ($request_method === 'POST') {
+            $controller->importJson();
+        } else {
+            http_response_code(405);
+            $errorMessage = "Method Not Allowed.";
+            require __DIR__ . '/views/error_view.php';
         }
         $content = ob_get_clean();
         ob_end_clean();

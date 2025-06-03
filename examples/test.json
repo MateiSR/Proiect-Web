@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Neuromancer",
+    "author": "William Gibson",
+    "genre": "Cyberpunk"
+  },
+  {
+    "title": "Foundation",
+    "author": "Isaac Asimov",
+    "genre": "Science Fiction"
+  },
+  {
+    "title": "The Chronicles of Narnia",
+    "author": "C.S. Lewis",
+    "genre": "Fantasy"
+  },
+  {
+    "title": "Slaughterhouse-Five",
+    "author": "Kurt Vonnegut",
+    "genre": "Satire, Science Fiction, War Story"
+  }
+]
