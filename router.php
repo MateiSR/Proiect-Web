@@ -93,6 +93,21 @@ switch ($request) {
         ob_end_clean();
         break;
 
+    case '/review/add':
+        if ($request_method === 'POST') {
+            require_once __DIR__ . '/controllers/ReviewController.php';
+            $controller = new ReviewController();
+            $controller->add();
+        } else {
+            http_response_code(405);
+            $errorMessage = "Method Not Allowed.";
+            ob_start();
+            require __DIR__ . '/views/error_view.php';
+            $content = ob_get_clean();
+            ob_end_clean();
+        }
+        exit;
+
     case '/admin':
     case '/admin/':
         ob_start();

@@ -15,7 +15,12 @@ class Book
 
   public function getAllBooks()
   {
-    $query = "SELECT id, title, author, genre, description, created_at FROM " . $this->table_name . " ORDER BY title ASC";
+    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
+                     COALESCE(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as review_count
+              FROM " . $this->table_name . " b
+              LEFT JOIN reviews r ON b.id = r.book_id
+              GROUP BY b.id
+              ORDER BY b.title ASC";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->execute();
@@ -27,7 +32,13 @@ class Book
 
   public function findBookById(int $id)
   {
-    $query = "SELECT id, title, author, genre, description, created_at FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
+                     COALESCE(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as review_count
+              FROM " . $this->table_name . " b
+              LEFT JOIN reviews r ON b.id = r.book_id
+              WHERE b.id = :id
+              GROUP BY b.id
+              LIMIT 1";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -55,10 +66,13 @@ class Book
   }
   public function searchBooks(string $searchTerm)
   {
-    // ilike = like but not case sensitive
-    $query = "SELECT id, title, author, genre, description, created_at FROM " . $this->table_name . "
-                  WHERE title ILIKE :searchTerm OR author ILIKE :searchTerm
-                  ORDER BY title ASC";
+    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
+                    COALESCE(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as review_count
+              FROM " . $this->table_name . " b
+              LEFT JOIN reviews r ON b.id = r.book_id
+              WHERE b.title ILIKE :searchTerm OR b.author ILIKE :searchTerm
+              GROUP BY b.id
+              ORDER BY b.title ASC";
 
     $likeTerm = '%' . $searchTerm . '%';
     try {

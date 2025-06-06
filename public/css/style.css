@@ -108,9 +108,14 @@ main {
   }
 
   .btn-back {
-    padding: 12px 25px;
+    padding: 12px 24px;
     background-color: #3498db;
     color: white;
+  }
+
+  .book-actions > a {
+    color: white;
+    text-decoration: none;
   }
 
   .btn-back:hover {
@@ -255,4 +260,45 @@ main {
 
 .delete-button:hover {
     background-color: #da190b; /* Darker red */
+}
+
+/* reviews */
+
+.reviews-section {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.review-form {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+}
+
+.reviews-container {
+  margin-top: 2rem;
+}
+
+.review {
+  padding: 1rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.review:last-child {
+  border-bottom: none;
+}
+
+.review p {
+  margin: 0.3rem 0;
+}
+
+.review small {
+  color: #777;
+}
+
+.book-rating {
+    font-size: 0.9em;
+    color: #555;
 }

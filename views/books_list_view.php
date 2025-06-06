@@ -17,6 +17,10 @@
           </h3>
           <p class="book-author"><strong>Author:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
           <p class="book-genre"><strong>Genre:</strong> <?php echo htmlspecialchars($book['genre'] ?? 'N/A'); ?></p>
+          <p class="book-rating">
+            <strong>Rating:</strong>
+            <?php echo number_format($book['avg_rating'], 2); ?> / 5 (<?php echo $book['review_count']; ?> reviews)
+          </p>
           <p class="book-date"><strong>Added On:</strong>
             <?php echo htmlspecialchars(date('j F Y', strtotime($book['created_at']))); ?></p>
         </div>

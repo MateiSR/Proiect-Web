@@ -30,6 +30,15 @@ class BookController
     $book = $this->bookModel->findBookById($id);
 
     if ($book) {
+      $loggedInUser = Utils::getLoggedInUser();
+      require_once __DIR__ . '/../models/Review.php';
+      $reviewModel = new Review();
+      $reviews = $reviewModel->getReviewsByBookId($id);
+      $userHasReviewed = false;
+      if ($loggedInUser) {
+        $userHasReviewed = $reviewModel->hasUserReviewedBook($loggedInUser['user_id'], $id);
+      }
+
       require_once __DIR__ . '/../views/book_detail_view.php';
     } else {
       http_response_code(404);

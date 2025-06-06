@@ -17,6 +17,16 @@ CREATE TABLE books (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(book_id, user_id)
+);
+
 INSERT INTO users (username, email, password, is_admin) VALUES
 ('admin', 'admin@admin.com', '$2y$10$SvCfPHzNz20vR2pySTm5quZ./Pn.TxdMSfxYfjjWdPOcR2AURqUHa', TRUE);
 
