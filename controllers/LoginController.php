@@ -15,27 +15,33 @@ class LoginController
     $this->userModel = new User();
   }
 
-  public function index()
+  public function index(): string
   {
+    $template = new Template('views/login_view.tpl');
     $loggedInUser = Utils::getLoggedInUser();
     $err = null;
     if ($loggedInUser != null) {
       $err = "You are already logged in as " . htmlspecialchars($loggedInUser['username']) . ".";
     }
-    $identifier_value = '';
-    require_once __DIR__ . '/../views/login_view.php';
+    $template->err = $err;
+    $template->identifier_value = '';
+    return $template->render();
   }
 
-  public function login()
+  public function login(): ?string
   {
+    $template = new Template('views/login_view.tpl');
+    $err = null;
+    $identifier_value = trim(strip_tags($_POST['identifier'] ?? ''));
+
     $loggedInUser = Utils::getLoggedInUser();
     if ($loggedInUser != null) {
       $err = "You are already logged in as " . htmlspecialchars($loggedInUser['username']) . ".";
-      require_once __DIR__ . '/../views/login_view.php';
-      return;
+      $template->err = $err;
+      $template->identifier_value = $identifier_value;
+      return $template->render();
     }
-    $err = null;
-    $identifier_value = trim(strip_tags($_POST['identifier'] ?? ''));
+
     $password = $_POST["password"] ?? '';
 
     if (empty($identifier_value)) {
@@ -84,8 +90,8 @@ class LoginController
         $err = "Unknown error: " . $e->getMessage();
       }
     }
-    require_once __DIR__ . '/../views/login_view.php';
+    $template->err = $err;
+    $template->identifier_value = $identifier_value;
+    return $template->render();
   }
 }
-
-?>
