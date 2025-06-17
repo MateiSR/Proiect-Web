@@ -1,6 +1,3 @@
-<?php
-$content = $content ?? '';
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,30 +9,32 @@ $content = $content ?? '';
 </head>
 
 <body>
-  <div class="nav">
-    <a href="/">
-      <p>Books on Web</p>
-    </a>
-    <div class="nav-links">
-      <a href="/books" class="highlight-link">Books</a>
-      <?php if (isset($loggedInUser)): ?>
-        <span class="color-gray">
-          Hello, <?= htmlspecialchars($loggedInUser['username']) ?>!
-        </span>
-        <?php if (isset($loggedInUser['is_admin']) && $loggedInUser['is_admin'] === true): ?>
-          <a href="/admin" class="highlight-link">Admin Home</a>
+  <header>
+    <div class="nav">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>Books on Web</h1>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/books">Books</a>
+        <?php if (isset($loggedInUser)): ?>
+          <a href="/groups">Groups</a>
+          <?php if ($loggedInUser['is_admin']): ?>
+            <a href="/admin" class="highlight-link">Admin</a>
+          <?php endif; ?>
+          <a href="/logout">Logout</a>
+        <?php else: ?>
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
         <?php endif; ?>
-        <a href="/logout">Logout</a>
-      <?php else: ?>
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-      <?php endif; ?>
+      </div>
     </div>
-  </div>
+  </header>
   <main>
     <?php echo $content; ?>
   </main>
-
 </body>
 
 </html>

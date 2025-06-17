@@ -271,6 +271,7 @@ main {
 
 .review-form {
   margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
   padding: 1.5rem;
   border-radius: 8px;
   background-color: #fafafa;
@@ -301,4 +302,39 @@ main {
 .book-rating {
     font-size: 0.9em;
     color: #555;
+}
+
+.detail-list {
+  display: flex;
+  gap: 2rem;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-3 {
+  flex: 3;
+}
+
+.h2-error {
+  color: #555;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.list-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mb-1rem {
+  margin-bottom: 1rem;
+}
+
+.no-decoration {
+  text-decoration: none;
+  color: #fff;
 }

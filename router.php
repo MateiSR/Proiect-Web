@@ -93,6 +93,59 @@ switch ($request) {
         }
         break;
 
+    case '/groups':
+        require_once __DIR__ . '/controllers/GroupController.php';
+        $controller = new GroupController();
+        $content = $controller->index();
+        break;
+
+    case '/group':
+        require_once __DIR__ . '/controllers/GroupController.php';
+        $controller = new GroupController();
+        if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT) && ((int) $_GET['id']) > 0) {
+            $content = $controller->show((int) $_GET['id']);
+        } else {
+            http_response_code(400);
+            $template = new Template('views/error_view.php');
+            $template->errorMessage = "Invalid or missing group ID.";
+            $content = $template->render();
+        }
+        break;
+
+    case '/group/create':
+        require_once __DIR__ . '/controllers/GroupController.php';
+        $controller = new GroupController();
+        if ($request_method === 'POST') {
+            $content = $controller->store();
+        } else {
+            $content = $controller->create();
+        }
+        break;
+
+    case '/group/join':
+        if ($request_method === 'POST') {
+            require_once __DIR__ . '/controllers/GroupController.php';
+            $controller = new GroupController();
+            $controller->join();
+        }
+        break;
+
+    case '/group/add-book':
+        if ($request_method === 'POST') {
+            require_once __DIR__ . '/controllers/GroupController.php';
+            $controller = new GroupController();
+            $controller->addBook();
+        }
+        break;
+
+    case '/group/discuss':
+        if ($request_method === 'POST') {
+            require_once __DIR__ . '/controllers/GroupController.php';
+            $controller = new GroupController();
+            $controller->postDiscussion();
+        }
+        break;
+
     case '/admin':
     case '/admin/':
         $template = new Template('views/admin_home_view.php');
