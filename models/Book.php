@@ -128,4 +128,20 @@ class Book
       return [];
     }
   }
+
+  public function getGenreStatistics()
+  {
+    $query = "SELECT genre, COUNT(id) as book_count
+              FROM " . $this->table_name . "
+              WHERE genre IS NOT NULL AND genre <> ''
+              GROUP BY genre
+              ORDER BY book_count DESC";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      return [];
+    }
+  }
 }

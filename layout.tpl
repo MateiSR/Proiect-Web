@@ -19,6 +19,7 @@
       <div class="nav-links">
         <a href="/">Home</a>
         <a href="/books">Books</a>
+        <a href="/statistics">Stats</a>
         <?php if (isset($loggedInUser)): ?>
           <a href="/groups">Groups</a>
           <?php if ($loggedInUser['is_admin']): ?>

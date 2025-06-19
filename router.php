@@ -237,6 +237,24 @@ switch ($request) {
         $controller->generateFeed();
         break;
 
+    case '/statistics':
+        require_once __DIR__ . '/controllers/StatisticsController.php';
+        $controller = new StatisticsController();
+        $content = $controller->index();
+        break;
+
+    case '/statistics/export/csv':
+        require_once __DIR__ . '/controllers/StatisticsController.php';
+        $controller = new StatisticsController();
+        $controller->exportCsv();
+        break;
+
+    case '/statistics/export/docbook':
+        require_once __DIR__ . '/controllers/StatisticsController.php';
+        $controller = new StatisticsController();
+        $controller->exportDocbook();
+        break;
+
     case '/libraries':
         require_once __DIR__ . '/controllers/LibraryController.php';
         $controller = new LibraryController();
