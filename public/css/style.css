@@ -338,3 +338,44 @@ main {
   text-decoration: none;
   color: #fff;
 }
+
+/* feed */
+/* Feed Container */
+.feed-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 2rem;
+}
+
+.feed-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.feed-list {
+  list-style: none;
+  padding: 0;
+}
+
+.feed-item {
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.feed-item-title a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.feed-item-meta {
+  color: #777;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.feed-item-description {
+  margin: 0;
+  color: #333;
+}

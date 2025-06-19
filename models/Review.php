@@ -59,4 +59,22 @@ class Review
       return false;
     }
   }
+
+  public function getLatestReviews(int $limit = 10)
+  {
+    $query = "SELECT r.id, r.comment, r.created_at, u.username, b.id as book_id, b.title as book_title
+                  FROM " . $this->table_name . " r
+                  JOIN users u ON r.user_id = u.id
+                  JOIN books b ON r.book_id = b.id
+                  ORDER BY r.created_at DESC
+                  LIMIT :limit";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      return [];
+    }
+  }
 }

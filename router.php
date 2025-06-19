@@ -31,8 +31,9 @@ $content = '';
 
 switch ($request) {
     case '/':
-        $template = new Template('views/home.php');
-        $content = $template->render();
+        require_once __DIR__ . '/controllers/HomeController.php';
+        $controller = new HomeController();
+        $content = $controller->index();
         break;
 
     case '/login':
@@ -228,6 +229,12 @@ switch ($request) {
             $template->errorMessage = "Method Not Allowed.";
             $content = $template->render();
         }
+        break;
+
+    case '/rss':
+        require_once __DIR__ . '/controllers/RssController.php';
+        $controller = new RssController();
+        $controller->generateFeed();
         break;
 
     case '/libraries':

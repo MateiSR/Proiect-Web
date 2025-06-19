@@ -112,4 +112,20 @@ class Book
       return false;
     }
   }
+
+  public function getLatestBooks(int $limit = 10)
+  {
+    $query = "SELECT id, title, author, description, created_at
+              FROM " . $this->table_name . "
+              ORDER BY created_at DESC
+              LIMIT :limit";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      return [];
+    }
+  }
 }
