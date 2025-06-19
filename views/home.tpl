@@ -26,7 +26,7 @@ if ($loggedInUser) {
                             href="<?= htmlspecialchars($item->get_permalink()) ?>"><?= htmlspecialchars($item->get_title()) ?></a>
                     </div>
                     <div class="feed-item-meta">
-                        <span class="feed-item-date"><?= $item->get_date('F j, Y, g:i a') ?></span>
+                        <span class="feed-item-date"><?= $item->get_date('j F Y, g:i a') ?></span>
                     </div>
                     <p class="feed-item-description"><?= htmlspecialchars($item->get_description()) ?></p>
                 </li>
