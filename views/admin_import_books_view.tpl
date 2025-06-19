@@ -1,4 +1,4 @@
-<div class="form-container">
+<div>
   <h2>Admin - Import Books</h2>
 
   <?php
@@ -8,7 +8,7 @@
   }
   ?>
 
-  <div class="import-section">
+  <div>
     <h3>Import from CSV</h3>
     <form action="/admin/import-books/csv" method="post" enctype="multipart/form-data">
       <label for="csv_file">Select CSV File:</label><br>
@@ -17,7 +17,7 @@
     </form>
   </div>
 
-  <div class="import-section">
+  <div>
     <h3>Import from JSON</h3>
     <form action="/admin/import-books/json" method="post" enctype="multipart/form-data">
       <label for="json_file">Select JSON File:</label><br>

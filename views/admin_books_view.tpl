@@ -8,11 +8,11 @@
           <h3>
             <?php echo htmlspecialchars($book['title']); ?>
           </h3>
-          <p class="book-author"><strong>Author:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
-          <p class="book-genre"><strong>Genre:</strong> <?php echo htmlspecialchars($book['genre'] ?? 'N/A'); ?></p>
+          <p><strong>Author:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
+          <p><strong>Genre:</strong> <?php echo htmlspecialchars($book['genre'] ?? 'N/A'); ?></p>
           <p class="book-description"><strong>Description:</strong>
             <?php echo htmlspecialchars($book['description'] ?? 'No description available.'); ?></p>
-          <p class="book-id"><strong>ID:</strong> <?php echo htmlspecialchars($book['id']); ?></p>
+          <p><strong>ID:</strong> <?php echo htmlspecialchars($book['id']); ?></p>
           <div class="admin-book-actions">
             <a href="/admin/books/edit?id=<?php echo htmlspecialchars($book['id']); ?>" class="button edit-button"
               style="color: white; text-decoration: none;">Edit</a>
