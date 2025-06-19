@@ -63,7 +63,7 @@
                 rated it <strong><?php echo htmlspecialchars($review['rating']); ?>/5</strong>
               </p>
               <?php if (!empty($review['comment'])): ?>
-                <p><?php echo nl2br(htmlspecialchars($review['comment'])); ?></p>
+                <p><?php echo htmlspecialchars($review['comment']); ?></p>
               <?php endif; ?>
               <small>on <?php echo date('j F Y', strtotime($review['created_at'])); ?></small>
             </div>

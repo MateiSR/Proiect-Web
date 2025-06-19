@@ -1,5 +1,5 @@
 <div class="books-list-container">
-  <h2>Library Catalog</h2>
+  <h2>Book Catalog</h2>
 
   <form action="/books" method="get" class="center">
     <input type="text" name="search" placeholder="Search book"
