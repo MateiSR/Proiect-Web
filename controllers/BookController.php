@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/Book.php';
 require_once __DIR__ . '/../config/utils.php';
+require_once __DIR__ . '/../models/UserBookProgress.php';
 
 class BookController
 {
@@ -44,8 +45,12 @@ class BookController
       $reviewModel = new Review();
       $reviews = $reviewModel->getReviewsByBookId($id);
       $userHasReviewed = false;
+      $progress = null;
+
       if ($loggedInUser) {
         $userHasReviewed = $reviewModel->hasUserReviewedBook($loggedInUser['user_id'], $id);
+        $progressModel = new UserBookProgress();
+        $progress = $progressModel->getProgress($loggedInUser['user_id'], $id);
       }
 
       $template = new Template('views/book_detail_view.tpl');
@@ -53,6 +58,7 @@ class BookController
       $template->loggedInUser = $loggedInUser;
       $template->reviews = $reviews;
       $template->userHasReviewed = $userHasReviewed;
+      $template->progress = $progress;
       return $template->render();
     } else {
       http_response_code(404);
@@ -71,6 +77,7 @@ class BookController
     $template->author_value = '';
     $template->genre_value = '';
     $template->description_value = '';
+    $template->pages_value = '';
     return $template->render();
   }
 
@@ -82,6 +89,8 @@ class BookController
     $genre_value = !empty($genre_value) ? $genre_value : null;
     $description_value = trim($_POST['description'] ?? '');
     $description_value = !empty($description_value) ? $description_value : null;
+    $pages_value = filter_input(INPUT_POST, 'pages', FILTER_VALIDATE_INT);
+    $pages_value = ($pages_value !== false && $pages_value > 0) ? $pages_value : null;
 
     $errors = [];
     $message = null;
@@ -95,7 +104,7 @@ class BookController
     }
 
     if (empty($errors)) {
-      if ($this->bookModel->createBook($title_value, $author_value, $genre_value, $description_value)) {
+      if ($this->bookModel->createBook($title_value, $author_value, $genre_value, $description_value, $pages_value)) {
         header("Location: /books");
         exit;
       } else {
@@ -112,6 +121,7 @@ class BookController
     $template->author_value = $author_value;
     $template->genre_value = $genre_value;
     $template->description_value = $description_value;
+    $template->pages_value = $pages_value ?? '';
     return $template->render();
   }
 
@@ -149,6 +159,8 @@ class BookController
     $genre_value = !empty($genre_value) ? $genre_value : null;
     $description_value = trim($_POST['description'] ?? '');
     $description_value = !empty($description_value) ? $description_value : null;
+    $pages_value = filter_input(INPUT_POST, 'pages', FILTER_VALIDATE_INT);
+    $pages_value = ($pages_value !== false && $pages_value > 0) ? $pages_value : null;
 
     $errors = [];
     $message = null;
@@ -171,7 +183,7 @@ class BookController
 
 
     if (empty($errors)) {
-      if ($this->bookModel->updateBook($id, $title_value, $author_value, $genre_value, $description_value)) {
+      if ($this->bookModel->updateBook($id, $title_value, $author_value, $genre_value, $description_value, $pages_value)) {
         $message = "Book updated successfully!";
         $message_type = 'success';
         $book = $this->bookModel->findBookById($id);
@@ -226,7 +238,7 @@ class BookController
         if ($header === false) {
           $message = "Could not read CSV header.";
         } else {
-          $expected_headers = ['title', 'author', 'genre', 'description'];
+          $expected_headers = ['title', 'author', 'genre', 'description', 'pages'];
           $header_map = [];
           foreach ($expected_headers as $expected_header) {
             $index = array_search($expected_header, $header);
@@ -236,16 +248,18 @@ class BookController
           }
 
           if (count($header_map) < 2 || !isset($header_map['title']) || !isset($header_map['author'])) {
-            $message = "CSV file must contain 'title' and 'author' columns. 'genre' and 'description' are optional.";
+            $message = "CSV file must contain 'title' and 'author' columns. 'genre', 'description' and 'pages' are optional.";
           } else {
             while (($data = fgetcsv($handle)) !== FALSE) {
               $title = $data[$header_map['title']] ?? '';
               $author = $data[$header_map['author']] ?? '';
               $genre = $data[$header_map['genre']] ?? null;
               $description = $data[$header_map['description']] ?? null;
+              $pages = isset($header_map['pages']) && is_numeric($data[$header_map['pages']]) ? (int) $data[$header_map['pages']] : null;
+
 
               if (!empty($title) && !empty($author)) {
-                if ($this->bookModel->createBook($title, $author, $genre, $description)) {
+                if ($this->bookModel->createBook($title, $author, $genre, $description, $pages)) {
                   $imported_count++;
                 }
               }
@@ -294,9 +308,10 @@ class BookController
             $author = $book['author'] ?? null;
             $genre = $book['genre'] ?? null;
             $description = $book['description'] ?? null;
+            $pages = isset($book['pages']) && is_numeric($book['pages']) ? (int) $book['pages'] : null;
 
             if (!empty($title) && !empty($author)) {
-              if ($this->bookModel->createBook($title, $author, $genre, $description)) {
+              if ($this->bookModel->createBook($title, $author, $genre, $description, $pages)) {
                 $imported_count++;
               }
             }

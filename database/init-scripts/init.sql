@@ -14,6 +14,7 @@ CREATE TABLE books (
     author VARCHAR(255) NOT NULL,
     genre VARCHAR(255),
     description TEXT,
+    pages INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -61,33 +62,41 @@ CREATE TABLE group_discussions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE user_book_progress (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+    current_page INTEGER NOT NULL CHECK (current_page >= 0),
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, book_id)
+);
 
 INSERT INTO users (username, email, password, is_admin) VALUES
 ('admin', 'admin@admin.com', '$2y$10$SvCfPHzNz20vR2pySTm5quZ./Pn.TxdMSfxYfjjWdPOcR2AURqUHa', TRUE);
 
-INSERT INTO books (title, author, genre) VALUES
-('The Midnight Library', 'Matt Haig', 'Contemporary Fiction, Magical Realism'),
-('1984', 'George Orwell', 'Dystopian, Political Fiction, Science Fiction'),
-('The Name of the Wind', 'Patrick Rothfuss', 'Epic Fantasy, Adventure'),
-('To Kill a Mockingbird', 'Harper Lee', 'Southern Gothic, Bildungsroman'),
-('The Great Gatsby', 'F. Scott Fitzgerald', 'Tragedy, Modernist Novel'),
-('Pride and Prejudice', 'Jane Austen', 'Romance, Satire'),
-('The Hobbit', 'J.R.R. Tolkien', 'High Fantasy, Children''s Literature'),
-('Brave New World', 'Aldous Huxley', 'Dystopian, Science Fiction'),
-('The Catcher in the Rye', 'J.D. Salinger', 'Coming-of-Age Fiction, Realist Novel'),
-('Fahrenheit 451', 'Ray Bradbury', 'Dystopian, Science Fiction'),
-('Moby Dick', 'Herman Melville', 'Adventure, Nautical Fiction'),
-('War and Peace', 'Leo Tolstoy', 'Historical Novel, Realist Novel'),
-('Crime and Punishment', 'Fyodor Dostoevsky', 'Philosophical Fiction, Psychological Fiction'),
-('The Lord of the Rings', 'J.R.R. Tolkien', 'High Fantasy, Adventure'),
-('Jane Eyre', 'Charlotte Brontë', 'Gothic Fiction, Romance'),
-('Wuthering Heights', 'Emily Brontë', 'Gothic Fiction, Tragedy'),
-('The Adventures of Sherlock Holmes', 'Arthur Conan Doyle', 'Detective Fiction, Mystery'),
-('Dracula', 'Bram Stoker', 'Gothic Fiction, Horror'),
-('Frankenstein', 'Mary Shelley', 'Gothic Fiction, Science Fiction'),
-('Anna Karenina', 'Leo Tolstoy', 'Realist Novel, Tragedy'),
-('The Picture of Dorian Gray', 'Oscar Wilde', 'Philosophical Fiction, Decadent Literature'),
-('Don Quixote', 'Miguel de Cervantes', 'Satire, Picaresque Novel'),
-('One Hundred Years of Solitude', 'Gabriel García Márquez', 'Magical Realism, Family Saga');
+INSERT INTO books (title, author, genre, pages) VALUES
+('The Midnight Library', 'Matt Haig', 'Contemporary Fiction, Magical Realism', 304),
+('1984', 'George Orwell', 'Dystopian, Political Fiction, Science Fiction', 328),
+('The Name of the Wind', 'Patrick Rothfuss', 'Epic Fantasy, Adventure', 662),
+('To Kill a Mockingbird', 'Harper Lee', 'Southern Gothic, Bildungsroman', 324),
+('The Great Gatsby', 'F. Scott Fitzgerald', 'Tragedy, Modernist Novel', 180),
+('Pride and Prejudice', 'Jane Austen', 'Romance, Satire', 279),
+('The Hobbit', 'J.R.R. Tolkien', 'High Fantasy, Children''s Literature', 310),
+('Brave New World', 'Aldous Huxley', 'Dystopian, Science Fiction', 311),
+('The Catcher in the Rye', 'J.D. Salinger', 'Coming-of-Age Fiction, Realist Novel', 224),
+('Fahrenheit 451', 'Ray Bradbury', 'Dystopian, Science Fiction', 159),
+('Moby Dick', 'Herman Melville', 'Adventure, Nautical Fiction', 635),
+('War and Peace', 'Leo Tolstoy', 'Historical Novel, Realist Novel', 1225),
+('Crime and Punishment', 'Fyodor Dostoevsky', 'Philosophical Fiction, Psychological Fiction', 430),
+('The Lord of the Rings', 'J.R.R. Tolkien', 'High Fantasy, Adventure', 1178),
+('Jane Eyre', 'Charlotte Brontë', 'Gothic Fiction, Romance', 500),
+('Wuthering Heights', 'Emily Brontë', 'Gothic Fiction, Tragedy', 342),
+('The Adventures of Sherlock Holmes', 'Arthur Conan Doyle', 'Detective Fiction, Mystery', 307),
+('Dracula', 'Bram Stoker', 'Gothic Fiction, Horror', 418),
+('Frankenstein', 'Mary Shelley', 'Gothic Fiction, Science Fiction', 280),
+('Anna Karenina', 'Leo Tolstoy', 'Realist Novel, Tragedy', 864),
+('The Picture of Dorian Gray', 'Oscar Wilde', 'Philosophical Fiction, Decadent Literature', 254),
+('Don Quixote', 'Miguel de Cervantes', 'Satire, Picaresque Novel', 863),
+('One Hundred Years of Solitude', 'Gabriel García Márquez', 'Magical Realism, Family Saga', 417);
 
 COMMIT;

@@ -12,7 +12,7 @@ if (strpos($request, '/admin') === 0) {
         if (!$currentUser) {
             header("Location: /");
         } else {
-            http_response_code(403); // Forbidden
+            http_response_code(403);
             $errorMessage = "Access Denied. You are not an admin.";
             $template = new Template('views/error_view.php');
             $template->errorMessage = $errorMessage;
@@ -77,6 +77,19 @@ switch ($request) {
             http_response_code(400);
             $template = new Template('views/error_view.php');
             $template->errorMessage = "Invalid or missing book ID.";
+            $content = $template->render();
+        }
+        break;
+
+    case '/progress/update':
+        if ($request_method === 'POST') {
+            require_once __DIR__ . '/controllers/ProgressController.php';
+            $controller = new ProgressController();
+            $controller->update();
+        } else {
+            http_response_code(405);
+            $template = new Template('views/error_view.php');
+            $template->errorMessage = "Method Not Allowed.";
             $content = $template->render();
         }
         break;
@@ -261,7 +274,7 @@ switch ($request) {
         if ($request_method === 'GET') {
             $controller->findNearby();
         } else {
-            http_response_code(405); // Method Not Allowed
+            http_response_code(405);
             exit;
         }
         break;

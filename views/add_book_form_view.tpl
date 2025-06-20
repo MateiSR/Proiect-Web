@@ -24,6 +24,10 @@
       <input type="text" id="genre" name="genre" value="<?php echo htmlspecialchars($genre_value ?? ''); ?>"><br><br>
     </div>
     <div>
+      <label for="pages">Pages (Optional):</label><br>
+      <input type="number" name="pages" value="<?= htmlspecialchars($pages_value) ?>">
+    </div>
+    <div>
       <label for="description">Description (Optional):</label><br>
       <textarea id="description" name="description" rows="5"
         cols="50"><?php echo htmlspecialchars($description_value ?? ''); ?></textarea><br><br>

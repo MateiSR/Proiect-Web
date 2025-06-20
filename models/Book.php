@@ -15,7 +15,7 @@ class Book
 
   public function getAllBooks()
   {
-    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
+    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.pages, b.created_at,
                      COALESCE(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as review_count
               FROM " . $this->table_name . " b
               LEFT JOIN reviews r ON b.id = r.book_id
@@ -32,7 +32,7 @@ class Book
 
   public function findBookById(int $id)
   {
-    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
+    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.pages, b.created_at,
                      COALESCE(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as review_count
               FROM " . $this->table_name . " b
               LEFT JOIN reviews r ON b.id = r.book_id
@@ -50,15 +50,16 @@ class Book
     }
   }
 
-  public function createBook(string $title, string $author, ?string $genre, ?string $description = null): bool
+  public function createBook(string $title, string $author, ?string $genre, ?string $description = null, ?int $pages = null): bool
   {
-    $query = "INSERT INTO " . $this->table_name . " (title, author, genre, description) VALUES (:title, :author, :genre, :description)";
+    $query = "INSERT INTO " . $this->table_name . " (title, author, genre, description, pages) VALUES (:title, :author, :genre, :description, :pages)";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':title', $title);
       $stmt->bindParam(':author', $author);
       $stmt->bindParam(':genre', $genre);
       $stmt->bindParam(':description', $description);
+      $stmt->bindParam(':pages', $pages, PDO::PARAM_INT);
       return $stmt->execute();
     } catch (PDOException $e) {
       return false;
@@ -66,7 +67,7 @@ class Book
   }
   public function searchBooks(string $searchTerm, string $genre = null)
   {
-    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
+    $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.pages, b.created_at,
                      AVG(r.rating) as avg_rating, COUNT(r.id) as review_count
               FROM " . $this->table_name . " b LEFT JOIN reviews r ON b.id = r.book_id";
 
@@ -84,7 +85,6 @@ class Book
     }
 
     if (!empty($conditions)) {
-      // add conditions one by one
       $query .= " WHERE " . implode(' AND ', $conditions);
     }
 
@@ -103,15 +103,14 @@ class Book
       }
 
       return $books;
-
     } catch (PDOException $e) {
       return [];
     }
   }
 
-  public function updateBook(int $id, string $title, string $author, ?string $genre, ?string $description): bool
+  public function updateBook(int $id, string $title, string $author, ?string $genre, ?string $description, ?int $pages): bool
   {
-    $query = "UPDATE " . $this->table_name . " SET title = :title, author = :author, genre = :genre, description = :description WHERE id = :id";
+    $query = "UPDATE " . $this->table_name . " SET title = :title, author = :author, genre = :genre, description = :description, pages = :pages WHERE id = :id";
     try {
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -119,6 +118,7 @@ class Book
       $stmt->bindParam(':author', $author);
       $stmt->bindParam(':genre', $genre);
       $stmt->bindParam(':description', $description);
+      $stmt->bindParam(':pages', $pages, PDO::PARAM_INT);
       return $stmt->execute();
     } catch (PDOException $e) {
       return false;
@@ -139,7 +139,7 @@ class Book
 
   public function getLatestBooks(int $limit = 10)
   {
-    $query = "SELECT id, title, author, description, created_at
+    $query = "SELECT id, title, author, description, pages, created_at
               FROM " . $this->table_name . "
               ORDER BY created_at DESC
               LIMIT :limit";

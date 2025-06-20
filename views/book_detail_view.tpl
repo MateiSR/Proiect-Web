@@ -4,12 +4,38 @@
     <div class="book-meta">
       <p><strong>Author:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
       <p><strong>Genre:</strong> <?php echo htmlspecialchars($book['genre'] ?? 'N/A'); ?></p>
+      <?php if (!empty($book['pages'])): ?>
+        <p><strong>Pages:</strong> <?= htmlspecialchars($book['pages']) ?></p>
+      <?php endif; ?>
       <p><strong>Average Rating:</strong>
         <?php echo number_format($book['avg_rating'], 2); ?> / 5 (from <?php echo $book['review_count']; ?> reviews)
       </p>
       <p><strong>Added to Library:</strong>
         <?php echo htmlspecialchars(date('j F Y, H:i', strtotime($book['created_at']))); ?></p>
     </div>
+
+    <?php if ($loggedInUser && !empty($book['pages'])): ?>
+      <div class="progress-section">
+        <h3>Your Progress</h3>
+        <?php
+        $currentPage = $progress['current_page'] ?? 0;
+        $totalPages = $book['pages'];
+        $percentage = $totalPages > 0 ? round(($currentPage / $totalPages) * 100) : 0;
+        ?>
+        <p>You are on page <?= $currentPage ?> of <?= $totalPages ?> (<?= $percentage ?>%).</p>
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: <?= $percentage ?>%;"></div>
+        </div>
+
+        <form action="/progress/update" method="POST" class="progress-form">
+          <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+          <label for="current_page">Update your current page:</label>
+          <input type="number" id="current_page" name="current_page" min="0" max="<?= $totalPages ?>"
+            value="<?= $currentPage ?>">
+          <button type="submit">Update Progress</button>
+        </form>
+      </div>
+    <?php endif; ?>
 
     <div class="book-description">
       <p><strong>Description:</strong>
