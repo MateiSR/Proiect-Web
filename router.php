@@ -62,6 +62,12 @@ switch ($request) {
         $controller->logout();
         break;
 
+    case '/profile':
+        require_once __DIR__ . '/controllers/ProfileController.php';
+        $controller = new ProfileController();
+        $content = $controller->index();
+        break;
+
     case '/books':
         require_once __DIR__ . '/controllers/BookController.php';
         $controller = new BookController();

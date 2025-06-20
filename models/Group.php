@@ -137,4 +137,22 @@ class Group
       return [];
     }
   }
+
+  public function getGroupsForUser(int $user_id)
+  {
+    $query = "SELECT g.id, g.name, g.description,
+                     (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) as member_count
+              FROM groups g
+              JOIN group_members gm ON g.id = gm.group_id
+              WHERE gm.user_id = :user_id
+              ORDER BY g.name ASC";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      return [];
+    }
+  }
 }

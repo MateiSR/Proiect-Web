@@ -42,4 +42,21 @@ class UserBookProgress
       return false;
     }
   }
+
+  public function getBooksForUser(int $user_id)
+  {
+    $query = "SELECT b.id, b.title, b.author, ubp.current_page, b.pages
+                FROM user_book_progress ubp
+                JOIN books b ON ubp.book_id = b.id
+                WHERE ubp.user_id = :user_id
+                ORDER BY ubp.updated_at DESC";
+    try {
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      return [];
+    }
+  }
 }

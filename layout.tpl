@@ -24,8 +24,9 @@
         <?php if (isset($loggedInUser)): ?>
           <a href="/groups">Groups</a>
           <?php if ($loggedInUser['is_admin']): ?>
-            <a href="/admin" class="highlight-link">Admin</a>
+            <a href="/admin" class="highlight-link">Admin Page</a>
           <?php endif; ?>
+          <a href="/profile">Profile</a>
           <a href="/logout">Logout</a>
         <?php else: ?>
           <a href="/login">Login</a>
