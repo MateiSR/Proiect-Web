@@ -16,6 +16,7 @@
           <h1>Books on Web</h1>
         </a>
       </div>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu">☰</button>
       <div class="nav-links">
         <a href="/">Home</a>
         <a href="/books">Books</a>
@@ -36,6 +37,7 @@
   <main>
     <?php echo $content; ?>
   </main>
+  <script src="/public/js/main.js"></script>
 </body>
 
 </html>

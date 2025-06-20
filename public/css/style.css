@@ -26,6 +26,7 @@ main {
   margin-bottom: 0;
 }
 
+/*nav*/
 .nav {
   display: flex;
   justify-content: space-between;
@@ -34,6 +35,7 @@ main {
   padding-right: 1rem;
   padding-left: 1rem;
   color: white;
+  flex-wrap: wrap;
 }
 
 .nav a {
@@ -45,6 +47,40 @@ main {
   display: flex;
   gap: 0.8rem;
 }
+
+.hamburger-menu {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 0.5rem 0;
+        width: 100%;
+        text-align: left;
+    }
+
+    .hamburger-menu {
+        display: block;
+    }
+}
+/**/
 
 .form {
   display: flex;
@@ -380,3 +416,4 @@ main {
   margin: 0;
   color: #333;
 }
+
