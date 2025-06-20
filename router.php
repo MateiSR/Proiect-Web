@@ -266,6 +266,11 @@ switch ($request) {
         }
         break;
 
+    case '/docs':
+        $content = file_get_contents(__DIR__ . '/public/docs.html');
+        break;
+
+
     default:
         http_response_code(404);
         $template = new Template('public/404.php');

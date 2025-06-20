@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentatie - Books on Web</title>
+  </head>
+  <body>
+    <header>
+      <h1>Documentatie: Books on Web</h1>
+      <p><strong>Autori:</strong> Radu Stefan-Matei, Cucos Tudor-Mihail</p>
+    </header>
+
+    <section id="introducere">
+      <h2>1. Introducere</h2>
+      <p>
+        Acest document descrie cerintele functionale si non-functionale pentru
+        aplicatia "Books on Web". Aplicatia este o platforma web destinata
+        iubitorilor de carti, permitand utilizatorilor sa descopere carti noi,
+        sa scrie recenzii, sa se alature unor grupuri de discutii si sa gaseasca
+        biblioteci in apropiere.
+      </p>
+
+      <article id="scop">
+        <h3>1.1 Scop</h3>
+        <p>
+          Scopul acestui document este de a oferi o descriere detaliata a
+          cerintelor pentru sistemul "Books on Web". Acesta va fi utilizat de
+          catre echipa de dezvoltare pentru a implementa functionalitatile
+          specificate si de catre echipa de testare pentru a verifica
+          conformitatea sistemului.
+        </p>
+      </article>
+    </section>
+
+    <section id="cerinte-functionale">
+      <h2>2. Cerinte Functionale</h2>
+
+      <article id="gestionare-utilizatori">
+        <h3>2.1 Gestionarea Utilizatorilor</h3>
+        <ul>
+          <li>
+            <strong>Inregistrare:</strong> Utilizatorii noi trebuie sa se poata
+            inregistra furnizand o adresa de e-mail, un nume de utilizator si o
+            parola. Sistemul valideaza datele si previne inregistrarile
+            duplicate pentru e-mail si nume de utilizator. (Vezi:
+            <code>htdocs/controllers/RegisterController.php</code>,
+            <code>htdocs/models/User.php</code>)
+          </li>
+          <li>
+            <strong>Autentificare:</strong> Utilizatorii inregistrati se pot
+            autentifica folosind e-mailul sau numele de utilizator si parola. La
+            autentificare, un token JWT este stocat intr-un cookie pentru a
+            mentine sesiunea activa. (Vezi:
+            <code>htdocs/controllers/LoginController.php</code>,
+            <code>htdocs/config/utils.php</code>)
+          </li>
+          <li>
+            <strong>Deconectare:</strong> Utilizatorii autentificati se pot
+            deconecta, actiune care va sterge cookie-ul de autentificare. (Vezi:
+            <code>htdocs/controllers/LogoutController.php</code>)
+          </li>
+          <li>
+            <strong>Rol de Administrator:</strong> Sistemul suporta un rol de
+            administrator cu privilegii extinse. Rutele de administrare sunt
+            protejate si accesibile doar utilizatorilor cu acest rol. (Vezi:
+            <code>htdocs/router.php</code>)
+          </li>
+        </ul>
+      </article>
+
+      <article id="gestionare-carti">
+        <h3>2.2 Gestionarea Cartilor</h3>
+        <ul>
+          <li>
+            <strong>Vizualizare Carti:</strong> Toti utilizatorii pot vizualiza
+            o lista de carti. Lista poate fi filtrata dupa gen si cautata dupa
+            titlu sau autor. (Vezi:
+            <code>htdocs/controllers/BookController.php</code>,
+            <code>htdocs/models/Book.php</code>)
+          </li>
+          <li>
+            <strong>Vizualizare Detalii Carte:</strong> Fiecare carte are o
+            pagina de detalii care afiseaza informatii complete, inclusiv
+            recenziile utilizatorilor. (Vezi:
+            <code>htdocs/controllers/BookController.php</code>)
+          </li>
+          <li>
+            <strong>Administrare Carti (Admin):</strong> Administratorii pot
+            adauga, edita si sterge carti din sistem. (Vezi:
+            <code>htdocs/controllers/BookController.php</code>)
+          </li>
+          <li>
+            <strong>Import Carti (Admin):</strong> Administratorii pot importa o
+            lista de carti dintr-un fisier CSV sau JSON, care trebuie sa contina
+            cel putin titlul si autorul. (Vezi:
+            <code>htdocs/controllers/BookController.php</code>,
+            <code>importCsv</code> si <code>importJson</code>)
+          </li>
+        </ul>
+      </article>
+
+      <article id="recenzii">
+        <h3>2.3 Recenzii si Evaluari</h3>
+        <ul>
+          <li>
+            <strong>Adaugare Recenzie:</strong> Utilizatorii autentificati pot
+            adauga o recenzie (rating de la 1 la 5 si un comentariu) pentru o
+            carte, dar numai o singura data per carte. (Vezi:
+            <code>htdocs/controllers/ReviewController.php</code>,
+            <code>htdocs/models/Review.php</code>)
+          </li>
+          <li>
+            <strong>Vizualizare Recenzii:</strong> Recenziile pentru o carte
+            sunt afisate pe pagina de detalii a cartii, impreuna cu rating-ul
+            mediu. (Vezi: <code>htdocs/models/Book.php</code>,
+            <code>htdocs/controllers/BookController.php</code>)
+          </li>
+        </ul>
+      </article>
+
+      <article id="grupuri-discutii">
+        <h3>2.4 Grupuri de Discutii</h3>
+        <ul>
+          <li>
+            <strong>Creare si Vizualizare Grupuri:</strong> Utilizatorii
+            autentificati pot crea grupuri de discutii noi si pot vizualiza o
+            lista a grupurilor existente. (Vezi:
+            <code>htdocs/controllers/GroupController.php</code>,
+            <code>htdocs/models/Group.php</code>)
+          </li>
+          <li>
+            <strong>Alaturare la Grup:</strong> Utilizatorii se pot alatura
+            grupurilor existente. Creatorul unui grup este adaugat automat ca
+            membru. (Vezi: <code>htdocs/controllers/GroupController.php</code>)
+          </li>
+          <li>
+            <strong>Gestionare Continut Grup:</strong> Membrii unui grup pot
+            adauga carti in lista grupului si pot posta comentarii in sectiunile
+            de discutii dedicate fiecarei carti. (Vezi:
+            <code>htdocs/controllers/GroupController.php</code>,
+            <code>htdocs/models/GroupDiscussion.php</code>)
+          </li>
+        </ul>
+      </article>
+
+      <article id="functionalitati-suplimentare">
+        <h3>2.5 Functionalitati Suplimentare</h3>
+        <ul>
+          <li>
+            <strong>Feed RSS:</strong> Aplicatia genereaza un feed RSS cu cele
+            mai recente carti si recenzii adaugate. (Vezi:
+            <code>htdocs/controllers/RssController.php</code>)
+          </li>
+          <li>
+            <strong>Statistici:</strong> O pagina de statistici afiseaza numarul
+            de recenzii si rating-ul mediu pentru fiecare carte. Aceste date pot
+            fi exportate in format CSV sau DocBook/XML. (Vezi:
+            <code>htdocs/controllers/StatisticsController.php</code>)
+          </li>
+          <li>
+            <strong>Gasire Biblioteci:</strong> Utilizatorii pot gasi biblioteci
+            in apropierea lor, furnizand coordonatele geografice (latitudine si
+            longitudine). Aplicatia foloseste serviciul Nominatim de la
+            OpenStreetMap pentru aceasta functionalitate. (Vezi:
+            <code>htdocs/controllers/LibraryController.php</code>,
+            <code>htdocs/services/LibraryService.php</code>)
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="diagrama-c4">
+      <h2>3. Descrierea Arhitecturii - Modelul C4</h2>
+      <p>
+        Modelul C4 ofera o metoda de a vizualiza arhitectura software la
+        diferite niveluri de abstractizare. Pentru proiectul "Books on Web",
+        putem descrie arhitectura astfel:
+      </p>
+
+      <article id="c4-context">
+        <h3>3.1 Nivel 1: Contextul Sistemului</h3>
+        <p>
+          La acest nivel, vedem aplicatia "Books on Web" ca o cutie neagra in
+          centrul diagramei. Interrelationeaza cu urmatoarele entitati:
+        </p>
+        <ul>
+          <li>
+            <strong>Utilizator:</strong> Interationeaza cu sistemul printr-un
+            browser web pentru a cauta carti, a se alatura grupurilor si a lasa
+            recenzii.
+          </li>
+          <li>
+            <strong>Administrator:</strong> Un tip special de utilizator care
+            gestioneaza continutul (carti) prin interfata de administrare.
+          </li>
+          <li>
+            <strong>Sistemul de E-mail:</strong> Desi nu este explicit
+            implementat in codul furnizat (nu exista functionalitati de
+            trimitere e-mail), un sistem real ar necesita interactiune cu un
+            serviciu de e-mail pentru inregistrare si notificari.
+          </li>
+          <li>
+            <strong>OpenStreetMap/Nominatim API:</strong> Un sistem extern
+            utilizat pentru a oferi date despre bibliotecile din apropiere.
+          </li>
+        </ul>
+      </article>
+
+      <article id="c4-containere">
+        <h3>3.2 Nivel 2: Containere</h3>
+        <p>
+          Aici, "marim" cutia neagra a sistemului "Books on Web" pentru a vedea
+          principalele sale componente (containere) tehnologice:
+        </p>
+        <ul>
+          <li>
+            <strong>Aplicatia Web (Server Apache cu PHP):</strong> Acesta este
+            containerul principal. El serveste paginile HTML utilizatorilor si
+            expune un API pentru functionalitatile aplicatiei. Este responsabil
+            pentru toata logica. Ruleaza pe un server web Apache si este scris
+            in PHP.
+          </li>
+          <li>
+            <strong>Baza de Date (PostgreSQL):</strong> Un container de stocare
+            care persista toate datele aplicatiei: utilizatori, carti, recenzii,
+            grupuri, etc. Schema este definita in <code>init.sql</code> si este
+            gestionata printr-un container Docker (conform
+            <code>compose.yaml</code>).
+          </li>
+          <li>
+            <strong>Adminer:</strong> Un container auxiliar (definit in
+            <code>compose.yaml</code>) care ofera o interfata web pentru
+            administrarea bazei de date PostgreSQL, utila in timpul dezvoltarii.
+          </li>
+        </ul>
+      </article>
+
+      <article id="c4-componente">
+        <h3>3.3 Nivel 3: Componente</h3>
+        <p>
+          Acum ne concentram pe containerul "Aplicatia Web" si il descompunem in
+          componentele sale principale. Acestea nu sunt neaparat clase
+          individuale, ci grupari logice de functionalitati:
+        </p>
+        <ul>
+          <li>
+            <strong>Router (<code>router.php</code>):</strong> Intercepteaza
+            toate cererile HTTP si le directioneaza catre controller-ul
+            corespunzator. Este punctul de intrare in logica aplicatiei.
+          </li>
+          <li>
+            <strong>Controlere (<code>htdocs/controllers/</code>):</strong>
+            Componente care gestioneaza cererile utilizatorului. Fiecare
+            controller este responsabil pentru o anumita resursa (ex:
+            <code>BookController</code>,
+            <code>UserController</code>/<code>LoginController</code>,
+            <code>GroupController</code>). Ele orchestreaza interactiunea dintre
+            modele si vederi.
+          </li>
+          <li>
+            <strong>Models (<code>htdocs/models/</code>):</strong> Reprezinta
+            interactiunea cu baza de date. Exista modele pentru fiecare entitate
+            majora: <code>User</code>, <code>Book</code>, <code>Review</code>,
+            <code>Group</code>.
+          </li>
+          <li>
+            <strong
+              >Views (<code>htdocs/views/</code>,
+              <code>layout.tpl</code>):</strong
+            >
+            Componente responsabile cu prezentarea datelor utilizatorului.
+            Acestea sunt fisiere PHP/HTML (sabloane) care sunt populate cu date
+            de catre controlere.
+          </li>
+          <li>
+            <strong>Services (<code>htdocs/services/</code>):</strong>
+            Componente care incapsuleaza logica pentru interactiunea cu servicii
+            externe, cum ar fi <code>LibraryService</code> pentru API-ul
+            Nominatim.
+          </li>
+          <li>
+            <strong
+              >Componenta de Autentificare (<code>utils.php</code>,
+              <code>LoginController.php</code>):</strong
+            >
+            Gestioneaza logica de autentificare, crearea si validarea
+            token-urilor JWT.
+          </li>
+        </ul>
+      </article>
+
+      <article id="c4-cod">
+        <h3>3.4 Nivel 4: Cod</h3>
+        <p>
+          La acest nivel detaliem implementarea catorva componente cheie pentru
+          a intelege cum functioneaza sistemul la nivel de cod sursa.
+        </p>
+        <ul>
+          <li>
+            <h4>Routerul (router.php)</h4>
+            <p>
+              Punctul de intrare in aplicatie este fisierul
+              <code>router.php</code>. Acesta examineaza URI-ul si metoda HTTP a
+              fiecarei cereri primite. Folosind o structura <code>switch</code>,
+              directioneaza cererea catre controller-ul si metoda
+              corespunzatoare. De exemplu, o cerere GET catre
+              <code>/books</code> va instantia <code>BookController</code> si va
+              apela metoda <code>index()</code>. Routerul este de asemenea
+              responsabil pentru securitatea rutelor de administrare (cele care
+              incep cu <code>/admin</code>), verificand daca utilizatorul este
+              autentificat si are rol de administrator inainte de a permite
+              accesul. La final, rezultatul (continutul HTML) generat de
+              controller este injectat in sablonul principal
+              <code>layout.tpl</code>.
+            </p>
+          </li>
+
+          <li>
+            <h4>Modelele (htdocs/models/)</h4>
+            <p>
+              Componentele de tip Model sunt responsabile pentru toata
+              interactiunea cu baza de date PostgreSQL. Fiecare model (ex:
+              <code>Book.php</code>, <code>User.php</code>,
+              <code>Review.php</code>) corespunde unei entitati din aplicatie.
+              Ele folosesc un obiect PDO, obtinut printr-un singleton
+              (<code>Database::getInstance()</code>), pentru a executa
+              interogari SQL. De exemplu, metoda
+              <code>Book::createBook()</code> primeste detalii despre o carte,
+              pregateste o interogare SQL de tip <code>INSERT</code> si o
+              executa, gestionand direct persistenta datelor in containerul
+              bazei de date. Similar,
+              <code>User::findUserByEmailOrUsername()</code> executa o
+              interogare <code>SELECT</code> pentru a gasi un utilizator.
+            </p>
+          </li>
+
+          <li>
+            <h4>
+              Autentificarea cu JWT (htdocs/controllers/LoginController.php,
+              htdocs/config/utils.php)
+            </h4>
+            <p>
+              Autentificarea se bazeaza pe JSON Web Tokens (JWT), folosind
+              biblioteca <code>firebase/php-jwt</code>. Cand un utilizator se
+              autentifica cu succes in <code>LoginController</code>, se creeaza
+              un token (payload) cu datele utilizatorului (ID, username, rol).
+              Acest payload este apoi codificat folosind metoda statica
+              <code>JWT::encode()</code>, un algoritm HS256 si o cheie secreta
+              stocata in cod. Tokenul rezultat este trimis clientului si stocat
+              intr-un cookie HTTP-only. Pentru a verifica daca un utilizator
+              este autentificat, aplicatia foloseste functia
+              <code>Utils::getLoggedInUser()</code>, care citeste cookie-ul,
+              decodeaza si valideaza tokenul folosind
+              <code>JWT::decode()</code> si aceeasi cheie secreta.
+            </p>
+          </li>
+
+          <li>
+            <h4>
+              Integrarea cu SimplePie (htdocs/controllers/HomeController.php)
+            </h4>
+            <p>
+              Biblioteca <code>simplepie/simplepie</code> este utilizata pentru
+              a citi si parsa feed-uri RSS. In <code>HomeController</code>,
+              pagina principala a aplicatiei foloseste SimplePie pentru a se
+              conecta la propriul feed RSS generat la adresa <code>/rss</code>.
+              Metoda <code>index()</code> instantiaza clasa
+              <code>SimplePie</code>, seteaza URL-ul feed-ului, il initializeaza
+              (<code>init()</code>) si extrage item-urile
+              (<code>get_items()</code>). Aceste item-uri, care reprezinta
+              ultimele carti si recenzii adaugate, sunt apoi trimise catre
+              sablonul <code>home.tpl</code> pentru a fi afisate. Acest mecanism
+              decupleaza generarea continutului de afisarea lui pe prima pagina.
+            </p>
+          </li>
+        </ul>
+      </article>
+    </section>
+  </body>
+</html>

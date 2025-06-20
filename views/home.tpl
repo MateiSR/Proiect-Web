@@ -12,6 +12,8 @@ if ($loggedInUser) {
     echo '<p>You are not logged in. Please <a href="/login">login</a> or <a href="/register">register</a>.</p>';
 }
 ?>
+<a href="/rss">RSS Feed</a>
+<a href="/docs">Documentation</a>
 
 <div class="feed-container">
     <h2>Recent Activity</h2>
