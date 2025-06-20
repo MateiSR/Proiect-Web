@@ -4,6 +4,18 @@
   <form action="/books" method="get" class="center">
     <input type="text" name="search" placeholder="Search book"
       value="<?php echo htmlspecialchars($searchTerm ?? ''); ?>" class="search-box">
+
+    <select name="genre" class="search-box">
+      <option value="">All Genres</option>
+      <?php if (isset($genres)): ?>
+        <?php foreach ($genres as $genre): ?>
+          <option value="<?= htmlspecialchars($genre['genre']) ?>" <?= (isset($selectedGenre) && $selectedGenre === $genre['genre']) ? 'selected' : '' ?>>
+            <?= htmlspecialchars($genre['genre']) ?>
+          </option>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </select>
+
     <button type="submit" class="search-button">Search</button>
   </form>
   <?php if (!empty($books)): ?>

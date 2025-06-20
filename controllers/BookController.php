@@ -15,10 +15,13 @@ class BookController
   public function index(): string
   {
     $searchTerm = trim($_GET['search'] ?? '');
+    $genre = trim($_GET['genre'] ?? '');
     $books = [];
 
-    if (!empty($searchTerm)) {
-      $books = $this->bookModel->searchBooks($searchTerm);
+    $genres = $this->bookModel->getGenreStatistics();
+
+    if (!empty($searchTerm) || !empty($genre)) {
+      $books = $this->bookModel->searchBooks($searchTerm, $genre);
     } else {
       $books = $this->bookModel->getAllBooks();
     }
@@ -26,6 +29,8 @@ class BookController
     $template = new Template('views/books_list_view.tpl');
     $template->books = $books;
     $template->searchTerm = $searchTerm;
+    $template->genres = $genres;
+    $template->selectedGenre = $genre;
     return $template->render();
   }
 

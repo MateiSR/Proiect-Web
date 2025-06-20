@@ -64,22 +64,46 @@ class Book
       return false;
     }
   }
-  public function searchBooks(string $searchTerm)
+  public function searchBooks(string $searchTerm, string $genre = null)
   {
     $query = "SELECT b.id, b.title, b.author, b.genre, b.description, b.created_at,
-                    COALESCE(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as review_count
-              FROM " . $this->table_name . " b
-              LEFT JOIN reviews r ON b.id = r.book_id
-              WHERE b.title ILIKE :searchTerm OR b.author ILIKE :searchTerm
-              GROUP BY b.id
+                     AVG(r.rating) as avg_rating, COUNT(r.id) as review_count
+              FROM " . $this->table_name . " b LEFT JOIN reviews r ON b.id = r.book_id";
+
+    $conditions = [];
+    $params = [];
+
+    if (!empty($searchTerm)) {
+      $conditions[] = "(b.title ILIKE :searchTerm OR b.author ILIKE :searchTerm)";
+      $params[':searchTerm'] = '%' . $searchTerm . '%';
+    }
+
+    if (!empty($genre)) {
+      $conditions[] = "b.genre = :genre";
+      $params[':genre'] = $genre;
+    }
+
+    if (!empty($conditions)) {
+      // add conditions one by one
+      $query .= " WHERE " . implode(' AND ', $conditions);
+    }
+
+    $query .= " GROUP BY b.id
               ORDER BY b.title ASC";
 
-    $likeTerm = '%' . $searchTerm . '%';
     try {
       $stmt = $this->conn->prepare($query);
-      $stmt->bindParam(':searchTerm', $likeTerm, PDO::PARAM_STR);
-      $stmt->execute();
-      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $stmt->execute($params);
+      $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($books as &$book) {
+        if ($book['avg_rating'] === null) {
+          $book['avg_rating'] = 0;
+        }
+      }
+
+      return $books;
+
     } catch (PDOException $e) {
       return [];
     }
