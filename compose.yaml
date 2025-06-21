@@ -6,7 +6,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./htdocs/Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     environment:
@@ -16,11 +16,11 @@ services:
 
   web:
     build:
-      context: ./htdocs
+      context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
-      - ./htdocs:/var/www/html
+      - ./:/var/www/html
     environment:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - DOMAIN=${DOMAIN}
@@ -44,7 +44,7 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./htdocs/database/init-scripts:/docker-entrypoint-initdb.d
+      - ./database/init-scripts:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 10s
