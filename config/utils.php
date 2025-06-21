@@ -2,7 +2,6 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
-require_once __DIR__ . '/../vendor/autoload.php';
 
 class Utils
 {
@@ -10,7 +9,7 @@ class Utils
   {
     if (isset($_COOKIE['auth_token'])) {
       $jwt = $_COOKIE['auth_token'];
-      $key = 'CHEIA MEA SUPER SECRETA';
+      $key = $_ENV['JWT_SECRET_KEY'];
 
       try {
         $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
@@ -20,11 +19,9 @@ class Utils
           'user_id' => $decoded->user_id
         ];
       } catch (ExpiredException $e) {
-        // Expired token
-        setcookie('auth_token', '', time() - 3600, '/'); // Clear cookie
+        setcookie('auth_token', '', time() - 3600, '/');
       } catch (Exception $e) {
-        // Invalid token
-        setcookie('auth_token', '', time() - 3600, '/'); // Clear cookie
+        setcookie('auth_token', '', time() - 3600, '/');
       }
     }
     return null;

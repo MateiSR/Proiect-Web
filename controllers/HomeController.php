@@ -7,7 +7,7 @@ class HomeController
   public function index(): string
   {
     $feed = new SimplePie\SimplePie();
-    $feed->set_feed_url('http://localhost/rss');
+    $feed->set_feed_url($_ENV['DOMAIN'] . '/rss');
     $feed->enable_cache(false);
     $feed->init();
     $feed->handle_content_type();

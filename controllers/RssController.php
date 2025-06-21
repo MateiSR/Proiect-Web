@@ -46,7 +46,7 @@ class RssController
 
     $channel = $doc->createElement('channel');
     $channel->appendChild($doc->createElement('title', 'Carti si Recenzii Adaugate Recent'));
-    $channel->appendChild($doc->createElement('link', 'http://' . $_SERVER['HTTP_HOST']));
+    $channel->appendChild($doc->createElement('link', $_ENV['DOMAIN']));
     $channel->appendChild($doc->createElement('description', 'Cartile si recenziile adaugate cel mai recent'));
     $channel->appendChild($doc->createElement('language', 'ro'));
     $rss->appendChild($channel);
@@ -63,13 +63,13 @@ class RssController
       if ($itemData['type'] === 'book') {
         $book = $itemData['data'];
         $title = 'Carte noua adaugata: ' . $book['title'];
-        $link = 'http://' . $_SERVER['HTTP_HOST'] . '/book?id=' . $book['id'];
+        $link = $_ENV['DOMAIN'] . '/book?id=' . $book['id'];
         $description = 'Autor: ' . $book['author'];
         $pubDate = date(DATE_RSS, $itemData['timestamp']);
       } else {
         $review = $itemData['data'];
         $title = $review['username'] . ' a recenzat ' . $review['book_title'];
-        $link = 'http://' . $_SERVER['HTTP_HOST'] . '/book?id=' . $review['book_id'];
+        $link = $_ENV['DOMAIN'] . '/book?id=' . $review['book_id'];
         $description = $review['comment'];
         $pubDate = date(DATE_RSS, $itemData['timestamp']);
       }

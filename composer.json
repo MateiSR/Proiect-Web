@@ -1,6 +1,7 @@
 {
     "require": {
         "firebase/php-jwt": "^6.11",
-        "simplepie/simplepie": "^1.8"
+        "simplepie/simplepie": "^1.8",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

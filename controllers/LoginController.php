@@ -53,13 +53,13 @@ class LoginController
         $user = $this->userModel->findUserByEmailOrUsername($identifier_value, $identifier_value);
 
         if ($user && password_verify($password, $user['password'])) {
-          $key = 'CHEIA MEA SUPER SECRETA';
+          $key = $_ENV['JWT_SECRET_KEY'];
           $issuedAt = time();
           $expirationTime = $issuedAt + (60 * 60);
 
           $payload = [
-            'iss' => 'http://localhost',
-            'aud' => 'http://localhost',
+            'iss' => $_ENV['DOMAIN'],
+            'aud' => $_ENV['DOMAIN'],
             'iat' => $issuedAt,
             'exp' => $expirationTime,
             'user_id' => $user['id'],
@@ -70,12 +70,13 @@ class LoginController
 
           $jwt = JWT::encode($payload, $key, 'HS256');
 
+          $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+
           $cookie_options = [
             'expires' => $expirationTime,
             'path' => '/',
             'domain' => '',
-            'secure' => false,
-            'httponly' => true
+            'secure' => $isHttps,
           ];
           setcookie("auth_token", $jwt, $cookie_options);
 
