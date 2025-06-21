@@ -12,7 +12,7 @@ class Database
         $port = $_ENV['DB_PORT'] ?? '5432';
         $db_name = $_ENV['DB_NAME'] ?? 'books_db';
         $username = $_ENV['DB_USER'] ?? 'postgres';
-        $password = $_ENV['DB_PASS'] ?? 'postgres';
+        $password = $_ENV['DB_PASSWORD'] ?? 'postgres';
 
         $dsn = "pgsql:host={$host};port={$port};dbname={$db_name}";
 
