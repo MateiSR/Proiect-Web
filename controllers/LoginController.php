@@ -77,6 +77,7 @@ class LoginController
             'path' => '/',
             'domain' => '',
             'secure' => $isHttps,
+            'httpOnly' => true, // cookie cannot be accessed by js
           ];
           setcookie("auth_token", $jwt, $cookie_options);
 
